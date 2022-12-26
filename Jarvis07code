@@ -1,0 +1,94 @@
+import pyttsx3 
+import speech_recognition as sr 
+import datetime
+import wikipedia 
+import webbrowser
+import os
+import smtplib
+import subprocess
+import requests
+import pywhatkit as kit
+from email.message import EmailMessage
+from decouple import config
+
+r=sr.Recognizer()
+
+engine = pyttsx3.init('sapi5')
+voices = engine.getProperty('voices')
+engine.setProperty('voice', voices[0].id)
+
+paths = {
+    'notepad':"‪C:\Windows\notepad.exe",
+     }   
+
+
+def speak(command):
+    engine=pyttsx3.init()
+    engine.say(command)
+    engine.runAndWait()
+
+
+def wishMe():
+    hour = int(datetime.datetime.now().hour)
+    if hour>=0 and hour<12:
+        print("Good Morning SIR")
+        speak("Good Morning SIR")
+
+    elif hour>=12 and hour<18:
+        print("Good Afternoon SIR")
+        speak("Good Afternoon SIR")   
+
+    else:
+        print("Good Evening SIR")
+        speak("Good Evening SIR")
+
+
+#def open_notepad():
+ #   os.startfile(paths['notepad'])
+
+    
+wishMe()
+
+print("How can i help you")        
+speak("How can i help you")
+while True:
+    
+    #i=input("How can i help you : ")
+    with sr.Microphone() as source2:
+        r.adjust_for_ambient_noise(source2,duration=0.2)
+        print("Listening.......")
+        audio2=r.listen(source2)
+        print("Recognising.....")
+        i=r.recognize_google(audio2)
+        i=i.lower()
+        print("Did you say '"+i+"'")    
+
+    if(i=='time'):
+        t=datetime.datetime.now().strftime("%I:%M:%S")
+        print("The time is ",t)
+        speak("The time is ")
+        speak(t)    
+    elif(i=='date'):
+        d=datetime.date.today()
+        print("The date is ",d)
+        speak("The date is ")
+        speak(d) 
+
+    elif(i=='open youtube'):
+        webbrowser.open("youtube.com")
+    
+    elif(i=='open google'):
+        webbrowser.open("google.com")
+    
+    elif(i=='open email'):
+        webbrowser.open("mail.google.com")
+
+    elif(i=='exit'):
+        break
+        
+    #if(i== 'open notepad'):
+       # open_notepad()
+
+
+input("prompt: ")
+    
